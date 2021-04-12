@@ -28,7 +28,7 @@ public class MemberController
     @Autowired
     MemberService memberService;
 
-    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/members",
             produces = "application/json")
     public ResponseEntity<?> listAllMembers()

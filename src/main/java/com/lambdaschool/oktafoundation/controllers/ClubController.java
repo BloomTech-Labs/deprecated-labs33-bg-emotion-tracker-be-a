@@ -23,7 +23,7 @@ public class ClubController
     @Autowired
     private ClubService clubService;
 
-    @PreAuthorize("hasAnyRole('SUPERADMIN')") // Double Check ROLE
+    @PreAuthorize("hasAnyRole('ADMIN')") // Double Check ROLE
     @GetMapping(value = "/clubs",
         produces = "application/json")
     public ResponseEntity<?> listAllClubs()
