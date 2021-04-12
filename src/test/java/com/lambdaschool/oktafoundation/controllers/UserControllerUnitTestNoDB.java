@@ -46,8 +46,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     properties = {
         "command.line.runner.enabled=false"})
 @AutoConfigureMockMvc
-@WithMockUser(username = "admin",
-    roles = {"USER", "ADMIN"})
+@WithMockUser(username = "llama001@maildrop.cc",
+    roles = {"SUPERADMIN"})
 public class UserControllerUnitTestNoDB
 {
     @Autowired
@@ -70,106 +70,71 @@ public class UserControllerUnitTestNoDB
     {
         userList = new ArrayList<>();
 
-        Role r1 = new Role("admin");
+        Role r1 = new Role("superadmin");
         r1.setRoleid(1);
-        Role r2 = new Role("user");
+        Role r2 = new Role("clubdir");
         r2.setRoleid(2);
-        Role r3 = new Role("data");
+        Role r3 = new Role("ydp");
         r3.setRoleid(3);
+        Role r4 = new Role("user");
+        r3.setRoleid(4);
 
-        // admin, data, user
-        u1 = new User("admin");
+        // super admin
+        u1 = new User("llama001@maildrop.cc");
         u1.getRoles()
             .add(new UserRoles(u1,
                 r1));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r2));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r3));
 
         u1.getUseremails()
             .add(new Useremail(u1,
-                "admin@email.local"));
+                "llama001@maildrop.cc"));
         u1.getUseremails()
             .get(0)
             .setUseremailid(10);
 
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@mymail.local"));
-        u1.getUseremails()
-            .get(1)
-            .setUseremailid(11);
-
         u1.setUserid(101);
         userList.add(u1);
 
-        // data, user
-        User u2 = new User("cinnamon");
-        u1.getRoles()
+        // club director
+        User u2 = new User("llama002@maildrop.cc");
+        u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
-        u1.getRoles()
-            .add(new UserRoles(u2,
-                r3));
-
         u2.getUseremails()
             .add(new Useremail(u2,
-                "cinnamon@mymail.local"));
+                "llama002@maildrop.cc"));
         u2.getUseremails()
             .get(0)
             .setUseremailid(20);
 
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "hops@mymail.local"));
-        u2.getUseremails()
-            .get(1)
-            .setUseremailid(21);
-
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.local"));
-        u2.getUseremails()
-            .get(2)
-            .setUseremailid(22);
-
         u2.setUserid(102);
         userList.add(u2);
 
-        // user
-        User u3 = new User("testingbarn");
-        u3.getRoles()
-            .add(new UserRoles(u3,
-                r1));
-
-        u3.getUseremails()
-            .add(new Useremail(u3,
-                "barnbarn@email.local"));
-        u3.getUseremails()
-            .get(0)
-            .setUseremailid(30);
-
-        u3.setUserid(103);
-        userList.add(u3);
-
-        User u4 = new User("testingcat");
-        u4.getRoles()
-            .add(new UserRoles(u4,
-                r2));
-
-        u4.setUserid(104);
-        userList.add(u4);
-
-        User u5 = new User("testingdog");
-        u4.getRoles()
+        // youth development professional ydp
+        User u5 = new User("llama005@maildrop.cc");
+        u5.getRoles()
             .add(new UserRoles(u5,
-                r2));
+                r3));
+
+        u5.getUseremails()
+            .add(new Useremail(u5,
+                "llama005@maildrop.cc"));
+        u5.getUseremails()
+            .get(0)
+            .setUseremailid(50);
 
         u5.setUserid(105);
         userList.add(u5);
+
+        // user
+        User u7 = new User("llama007@maildrop.cc");
+        u7.getRoles()
+            .add(new UserRoles(u7,
+                r4));
+
+        u7.setUserid(107);
+        userList.add(u7);
+
 
         System.out.println("\n*** Seed Data ***");
         for (User u : userList)
@@ -226,7 +191,7 @@ public class UserControllerUnitTestNoDB
     public void listUsersNameContaining() throws
                                           Exception
     {
-        String apiUrl = "/users/user/name/like/cin";
+        String apiUrl = "/users/user/name/like/llama";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
             .thenReturn(u1);
@@ -258,13 +223,13 @@ public class UserControllerUnitTestNoDB
     public void getUserById() throws
                               Exception
     {
-        String apiUrl = "/users/user/12";
+        String apiUrl = "/users/user/101";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
             .thenReturn(u1);
 
-        Mockito.when(userService.findUserById(12))
-            .thenReturn(userList.get(1));
+        Mockito.when(userService.findUserById(101))
+            .thenReturn(userList.get(0));
 
         RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
             .accept(MediaType.APPLICATION_JSON);
@@ -274,7 +239,7 @@ public class UserControllerUnitTestNoDB
             .getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(userList.get(1));
+        String er = mapper.writeValueAsString(userList.get(0));
 
         System.out.println("Expect: " + er);
         System.out.println("Actual: " + tr);
@@ -317,12 +282,12 @@ public class UserControllerUnitTestNoDB
     public void getUserByName() throws
                                 Exception
     {
-        String apiUrl = "/users/user/name/testing";
+        String apiUrl = "/users/user/name/llama001@maildrop.cc";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
             .thenReturn(u1);
 
-        Mockito.when(userService.findByName("testing"))
+        Mockito.when(userService.findByName("llama001@maildrop.cc"))
             .thenReturn(userList.get(0));
 
         RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
@@ -388,7 +353,7 @@ public class UserControllerUnitTestNoDB
         RequestBuilder rb = MockMvcRequestBuilders.post(apiUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content("{\"username\": \"tiger\", \"password\": \"ILuvM4th!\", \"primaryemail\" : \"tiger@home.local\"}");
+            .content("{\"username\": \"llama001@maildrop.cc\", \"primaryemail\" : \"llama001@maildrop.cc\"}");
 
         mockMvc.perform(rb)
             .andExpect(status().isCreated())
@@ -411,7 +376,7 @@ public class UserControllerUnitTestNoDB
             100L)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content("{\"username\": \"tigerUpdated\", \"password\": \"EATEATEAT\", \"primaryemail\" : \"ginger@home.local\"}");
+            .content("{\"username\": \"llama001Updated@maildrop.cc\", \"primaryemail\" : \"llama001@maildrop.cc\"}");
 
         mockMvc.perform(rb)
             .andExpect(status().is2xxSuccessful())
@@ -435,7 +400,7 @@ public class UserControllerUnitTestNoDB
             100L)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content("{\"username\": \"tigerUpdated\", \"password\": \"EATEATEAT\", \"primaryemail\" : \"ginger@home.local\"}");
+            .content("{\"username\": \"llama001Updated@maildrop.cc\", \"primaryemail\" : \"llama001Updated@maildrop.cc\"}");
 
         mockMvc.perform(rb)
             .andExpect(status().is2xxSuccessful())
@@ -449,7 +414,7 @@ public class UserControllerUnitTestNoDB
         String apiUrl = "/users/user/{userid}";
 
         RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl,
-            "3")
+            "101")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON);
 
