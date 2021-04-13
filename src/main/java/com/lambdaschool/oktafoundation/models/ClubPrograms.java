@@ -1,11 +1,10 @@
 package com.lambdaschool.oktafoundation.models;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "clubprograms")
@@ -15,14 +14,15 @@ public class ClubPrograms
     implements Serializable {
 
     @Id
-    @ManyToMany
+    @ManyToOne
     @NotNull
     @JoinColumn(name = "clubid")
-    @JsonIgnoreProperties(value = "programs")
+    @JsonIgnoreProperties (value = "programs",
+        allowSetters = true)
     private Club club;
 
     @Id
-    @ManyToMany
+    @ManyToOne
     @NotNull
     @JoinColumn(name = "programid")
     @JsonIgnoreProperties(value = "clubs")
@@ -62,7 +62,7 @@ public class ClubPrograms
             return false;
         }
         ClubPrograms that = (ClubPrograms) o;
-        return ((club == null) ? 0 : club.getClubid()) == ((that.club == null) ? 0 : that.club.getClubid()) &&
+        return ((club == null) ? 0 : club.getClubId()) == ((that.club == null) ? 0 : that.club.getClubId()) &&
             ((program == null) ? 0 : program.getProgramid()) == ((that.program == null) ? 0 : that.program.getProgramid());
     }
 
