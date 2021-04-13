@@ -54,7 +54,7 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
             .authenticated()
             .antMatchers("/roles/**")
             .hasAnyRole("ADMIN")
-                
+
             // *** Endpoints not specified above are automatically denied
             .anyRequest()
             .denyAll()

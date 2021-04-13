@@ -21,20 +21,6 @@ public class Club extends Auditable
 
     private String location;
 
-    @OneToMany(mappedBy = "club",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonIgnoreProperties(value = "club",
-            allowSetters = true)
-    private List<Member> members = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "club",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true)
-//    @JsonIgnoreProperties(value = "club",
-//            allowSetters = true)
-//    private List<Program> programs = new ArrayList<>();
-
 
     public Club()
     {
@@ -70,11 +56,4 @@ public class Club extends Auditable
         this.location = location;
     }
 
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
 }

@@ -17,70 +17,30 @@ public class Member extends Auditable
     @Column(unique = true)
     private String memberid;
 
-//    @NotNull
-//    private String clubid;
 
-    @ManyToOne
-    @NotNull
-    @JoinColumn(name = "clubid")
-    @JsonIgnoreProperties(value = "members",
-            allowSetters = true)
-    private Club club;
 
     public Member()
     {
     }
 
-//    public Member(
-//            @NotNull String memberid,
-//            @NotNull String clubid)
-//    {
-//        this.memberid = memberid;
-//        this.clubid = clubid;
-//    }
-
-
-    public Member(@NotNull String memberid, @NotNull Club club) {
+    public Member(long id, @NotNull String memberid) {
+        this.id = id;
         this.memberid = memberid;
-        this.club = club;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getMemberid()
-    {
+    public String getMemberid() {
         return memberid;
     }
 
-    public void setMemberid(String memberid)
-    {
+    public void setMemberid(String memberid) {
         this.memberid = memberid;
-    }
-
-//    public String getClubid()
-//    {
-//        return clubid;
-//    }
-//
-//    public void setClubid(String clubid)
-//    {
-//        this.clubid = clubid;
-//    }
-
-
-    public Club getClub() {
-        return club;
-    }
-
-    public void setClub(Club club) {
-        this.club = club;
     }
 }
