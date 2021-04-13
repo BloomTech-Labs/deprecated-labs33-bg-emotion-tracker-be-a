@@ -13,7 +13,7 @@ public class Club extends Auditable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long clubid;
 
     @NotNull
     @Column(unique = true)
@@ -32,12 +32,12 @@ public class Club extends Auditable
         this.location = location;
     }
 
-    public long getId() {
-        return id;
+    public long getClubId() {
+        return clubid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setClubId(long clubid) {
+        this.clubid = clubid;
     }
 
     public String getClubname() {
