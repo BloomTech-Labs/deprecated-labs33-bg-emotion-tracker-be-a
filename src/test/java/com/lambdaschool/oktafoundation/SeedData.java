@@ -61,100 +61,61 @@ public class SeedData
     {
         userService.deleteAll();
         roleService.deleteAll();
-        Role r1 = new Role("admin");
-        Role r2 = new Role("user");
-        Role r3 = new Role("data");
+
+        Role r1 = new Role("superadmin");
+        Role r2 = new Role("clubdir");
+        Role r3 = new Role("ydp");
+        Role r4 = new Role("user");
 
         r1 = roleService.save(r1);
         r2 = roleService.save(r2);
         r3 = roleService.save(r3);
+        r4 = roleService.save(r4);
 
-        // admin, data, user
-        User u1 = new User("admin");
+        // Super Admin
+        User u1 = new User("llama001@maildrop.cc");
         u1.getRoles()
             .add(new UserRoles(u1,
                 r1));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r2));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r3));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@email.local"));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@mymail.local"));
-
         userService.save(u1);
 
-        // data, user
-        User u2 = new User("cinnamon");
+
+        // Club Directors
+        User u2 = new User("llama002@maildrop.cc");
         u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
-        u2.getRoles()
-            .add(new UserRoles(u2,
-                r3));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "cinnamon@mymail.local"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "hops@mymail.local"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.local"));
         userService.save(u2);
 
-        // user
-        User u3 = new User("barnbarn");
+        User u3 = new User("llama003@maildrop.cc");
         u3.getRoles()
             .add(new UserRoles(u3,
                 r2));
-        u3.getUseremails()
-            .add(new Useremail(u3,
-                "barnbarn@email.local"));
         userService.save(u3);
 
-        User u4 = new User("puttat");
+        User u4 = new User("llama004@maildrop.cc");
         u4.getRoles()
             .add(new UserRoles(u4,
                 r2));
         userService.save(u4);
 
-        User u5 = new User("misskitty");
+        // Youth Development Professionals
+        User u5 = new User("llama005@maildrop.cc");
         u5.getRoles()
             .add(new UserRoles(u5,
-                r2));
+                r3));
         userService.save(u5);
 
-        if (false)
-        {
-            // using JavaFaker create a bunch of regular users
-            // https://www.baeldung.com/java-faker
-            // https://www.baeldung.com/regular-expressions-java
+        User u6 = new User("llama006@maildrop.cc");
+        u6.getRoles()
+            .add(new UserRoles(u6,
+                r3));
+        userService.save(u6);
 
-            FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),
-                new RandomService());
-            Faker nameFaker = new Faker(new Locale("en-US"));
-
-            for (int i = 0; i < 25; i++)
-            {
-                new User();
-                User fakeUser;
-
-                fakeUser = new User(nameFaker.name()
-                    .username());
-                fakeUser.getRoles()
-                    .add(new UserRoles(fakeUser,
-                        r2));
-                fakeUser.getUseremails()
-                    .add(new Useremail(fakeUser,
-                        fakeValuesService.bothify("????##@gmail.com")));
-                userService.save(fakeUser);
-            }
-        }
+        User u7 = new User("llama007@maildrop.cc");
+        u7.getRoles()
+            .add(new UserRoles(u7,
+                r3));
+        userService.save(u7);
     }
 }

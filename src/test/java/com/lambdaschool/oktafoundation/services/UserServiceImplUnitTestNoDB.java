@@ -55,106 +55,78 @@ public class UserServiceImplUnitTestNoDB
     {
         userList = new ArrayList<>();
 
-        Role r1 = new Role("admin");
+        Role r1 = new Role("superadmin");
         r1.setRoleid(1);
-        Role r2 = new Role("user");
+        Role r2 = new Role("clubdir");
         r2.setRoleid(2);
-        Role r3 = new Role("data");
+        Role r3 = new Role("ydp");
         r3.setRoleid(3);
+        Role r4 = new Role("user");
+        r4.setRoleid(4);
 
-        // admin, data, user
-        User u1 = new User("testadmin");
+
+        // Test User 1 Super Admin
+        User u1 = new User("llama001@maildrop.cc");
         u1.getRoles()
             .add(new UserRoles(u1,
                 r1));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r2));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r3));
 
         u1.getUseremails()
             .add(new Useremail(u1,
-                "admin@email.local"));
+                "llama001@maildrop.cc"));
         u1.getUseremails()
             .get(0)
             .setUseremailid(10);
 
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@mymail.local"));
-        u1.getUseremails()
-            .get(1)
-            .setUseremailid(11);
-
         u1.setUserid(101);
         userList.add(u1);
 
-        // data, user
-        User u2 = new User("cinnamon");
-        u1.getRoles()
+
+        // Test User 2 Club Director
+        User u2 = new User("llama002@maildrop.cc");
+        u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
-        u1.getRoles()
-            .add(new UserRoles(u2,
-                r3));
-
         u2.getUseremails()
             .add(new Useremail(u2,
-                "cinnamon@mymail.local"));
+                "llama002@maildrop.cc"));
         u2.getUseremails()
             .get(0)
-            .setUseremailid(20);
-
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "hops@mymail.local"));
-        u2.getUseremails()
-            .get(1)
-            .setUseremailid(21);
-
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.local"));
-        u2.getUseremails()
-            .get(2)
-            .setUseremailid(22);
+            .setUseremailid(12);
 
         u2.setUserid(102);
         userList.add(u2);
 
-        // user
-        User u3 = new User("testingbarn");
-        u3.getRoles()
-            .add(new UserRoles(u3,
-                r1));
-
-        u3.getUseremails()
-            .add(new Useremail(u3,
-                "barnbarn@email.local"));
-        u3.getUseremails()
-            .get(0)
-            .setUseremailid(30);
-
-        u3.setUserid(103);
-        userList.add(u3);
-
-        User u4 = new User("testingcat");
-        u4.getRoles()
-            .add(new UserRoles(u4,
-                r2));
-
-        u4.setUserid(104);
-        userList.add(u4);
-
-        User u5 = new User("testingdog");
-        u4.getRoles()
+        // Test User 5 Youth Development Professional
+        User u5 = new User("llama005@maildrop.cc");
+        u5.getRoles()
             .add(new UserRoles(u5,
-                r2));
+                r3));
+        u5.getUseremails()
+            .add(new Useremail(u5,
+                "llama005@maildrop.cc"));
+        u5.getUseremails()
+            .get(0)
+            .setUseremailid(15);
 
         u5.setUserid(105);
         userList.add(u5);
+
+
+        // Test User 7 User role
+        User u7 = new User("llama007@maildrop.cc");
+        u7.getRoles()
+            .add(new UserRoles(u7,
+                r3));
+        u7.getUseremails()
+            .add(new Useremail(u7,
+                "llama007@maildrop.cc"));
+        u7.getUseremails()
+            .get(0)
+            .setUseremailid(17);
+
+        u7.setUserid(107);
+        userList.add(u7);
 
         System.out.println("\n*** Seed Data ***");
         for (User u : userList)
@@ -177,7 +149,7 @@ public class UserServiceImplUnitTestNoDB
         Mockito.when(userrepos.findById(101L))
             .thenReturn(Optional.of(userList.get(0)));
 
-        assertEquals("testadmin",
+        assertEquals("llama001@maildrop.cc",
             userService.findUserById(101L)
                 .getUsername());
     }
@@ -188,7 +160,7 @@ public class UserServiceImplUnitTestNoDB
         Mockito.when(userrepos.findById(10L))
             .thenReturn(Optional.empty());
 
-        assertEquals("admin",
+        assertEquals("llama001@maildrop.cc",
             userService.findUserById(10L)
                 .getUsername());
     }
@@ -199,7 +171,7 @@ public class UserServiceImplUnitTestNoDB
         Mockito.when(userrepos.findAll())
             .thenReturn(userList);
 
-        assertEquals(5,
+        assertEquals(4,
             userService.findAll()
                 .size());
     }
@@ -207,79 +179,79 @@ public class UserServiceImplUnitTestNoDB
     @Test
     public void delete()
     {
-        Mockito.when(userrepos.findById(103L))
+        Mockito.when(userrepos.findById(101L))
             .thenReturn(Optional.of(userList.get(0)));
 
         Mockito.doNothing()
             .when(userrepos)
-            .deleteById(103L);
+            .deleteById(101L);
 
-        userService.delete(103L);
-        assertEquals(5,
+        userService.delete(101L);
+        assertEquals(4,
             userList.size());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void notFoundDelete()
     {
-        Mockito.when(userrepos.findById(10L))
+        Mockito.when(userrepos.findById(999L))
             .thenReturn(Optional.empty());
 
         Mockito.doNothing()
             .when(userrepos)
-            .deleteById(10L);
+            .deleteById(999L);
 
-        userService.delete(10L);
-        assertEquals(5,
+        userService.delete(999L);
+        assertEquals(4,
             userList.size());
     }
 
     @Test
     public void findByUsername()
     {
-        Mockito.when(userrepos.findByUsername("testadmin"))
+        Mockito.when(userrepos.findByUsername("llama001@maildrop.cc"))
             .thenReturn(userList.get(0));
 
-        assertEquals("testadmin",
-            userService.findByName("testadmin")
+        assertEquals("llama001@maildrop.cc",
+            userService.findByName("llama001@maildrop.cc")
                 .getUsername());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void findByUsernameNotfound()
     {
-        Mockito.when(userrepos.findByUsername("nonsense"))
+        Mockito.when(userrepos.findByUsername("notauser"))
             .thenReturn(null);
 
-        assertEquals("nonsense",
-            userService.findByName("nonsense")
+        assertEquals("notauser",
+            userService.findByName("notauser")
                 .getUsername());
     }
 
     @Test
     public void findByNameContaining()
     {
-        Mockito.when(userrepos.findByUsernameContainingIgnoreCase("a"))
+        Mockito.when(userrepos.findByUsernameContainingIgnoreCase("llama"))
             .thenReturn(userList);
 
-        assertEquals(5,
-            userService.findByNameContaining("a")
+        assertEquals(4,
+            userService.findByNameContaining("llama")
                 .size());
     }
 
     @Test
     public void save()
     {
-        Role r2 = new Role("user");
+        Role r2 = new Role("clubdir");
         r2.setRoleid(2);
 
-        User u2 = new User("tiger");
+        User u2 = new User("llama002@maildrop.cc");
         u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
         u2.getUseremails()
             .add(new Useremail(u2,
-                "tiger@tiger.local"));
+                "llama002@maildrop.cc"));
 
         Mockito.when(roleService.findRoleById(2))
             .thenReturn(r2);
@@ -287,7 +259,7 @@ public class UserServiceImplUnitTestNoDB
         Mockito.when(userrepos.save(any(User.class)))
             .thenReturn(u2);
 
-        assertEquals("tiger",
+        assertEquals("llama002@maildrop.cc",
             userService.save(u2)
                 .getUsername());
     }
@@ -295,93 +267,82 @@ public class UserServiceImplUnitTestNoDB
     @Test
     public void savePut()
     {
-        Role r2 = new Role("user");
-        r2.setRoleid(2);
+        Role r3 = new Role("ydp");
+        r3.setRoleid(3);
 
-        User u2 = new User("tiger");
-        u2.getRoles()
-            .add(new UserRoles(u2,
-                r2));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "tiger@tiger.local"));
-        u2.setUserid(103L);
+        User u5 = new User("llama005@maildrop.cc");
+        u5.getRoles()
+            .add(new UserRoles(u5,
+                r3));
+        u5.getUseremails()
+            .add(new Useremail(u5,
+                "llama005@maildrop.cc"));
+        u5.setUserid(105L);
 
-        Mockito.when(userrepos.findById(103L))
-            .thenReturn(Optional.of(u2));
+        Mockito.when(userrepos.findById(105L))
+            .thenReturn(Optional.of(u5));
 
-        Mockito.when(roleService.findRoleById(2))
-            .thenReturn(r2);
+        Mockito.when(roleService.findRoleById(3))
+            .thenReturn(r3);
 
         Mockito.when(userrepos.save(any(User.class)))
-            .thenReturn(u2);
+            .thenReturn(u5);
 
-        assertEquals(103L,
-            userService.save(u2)
+        assertEquals(105L,
+            userService.save(u5)
                 .getUserid());
     }
 
     @Test
     public void update()
     {
-        Role r2 = new Role("user");
-        r2.setRoleid(2);
+        Role r4 = new Role("user");
+        r4.setRoleid(4);
 
-        User u2 = new User("cinnamon");
-        u2.getRoles()
-            .add(new UserRoles(u2,
-                r2));
+        User u7 = new User("llama007@maildrop.cc");
+        u7.getRoles()
+            .add(new UserRoles(u7,
+                r4));
 
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "cinnamon@mymail.thump"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "hops@mymail.thump"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.thump"));
+        u7.getUseremails()
+            .add(new Useremail(u7,
+                "llama007@maildrop.cc"));
 
-        Mockito.when(userrepos.findById(103L))
-            .thenReturn(Optional.of(userList.get(2)));
+
+        Mockito.when(userrepos.findById(107L))
+            .thenReturn(Optional.of(userList.get(3)));
 
         Mockito.when(helperFunctions.isAuthorizedToMakeChange(anyString()))
             .thenReturn(true);
 
         Mockito.when(userrepos.save(any(User.class)))
-            .thenReturn(u2);
+            .thenReturn(u7);
 
-        Mockito.when(roleService.findRoleById(2))
-            .thenReturn(r2);
+        Mockito.when(roleService.findRoleById(4))
+            .thenReturn(r4);
 
-        assertEquals("bunny@email.thump",
-            userService.update(u2,
-                103L)
+        assertEquals("llama007@maildrop.cc",
+            userService.update(u7,
+                107L)
                 .getUseremails()
-                .get(2)
+                .get(0)
                 .getUseremail());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void updateNotFound()
     {
-        Role r2 = new Role("user");
+        Role r2 = new Role("clubdir");
         r2.setRoleid(2);
 
-        User u2 = new User("cinnamon");
+        User u2 = new User("llama002@maildrop.cc");
         u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
 
         u2.getUseremails()
             .add(new Useremail(u2,
-                "cinnamon@mymail.thump"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "hops@mymail.thump"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.thump"));
+                "lama002@maildrop.cc"));
 
         Mockito.when(userrepos.findById(103L))
             .thenReturn(Optional.empty());
@@ -395,52 +356,46 @@ public class UserServiceImplUnitTestNoDB
         Mockito.when(userrepos.save(any(User.class)))
             .thenReturn(u2);
 
-        assertEquals("bunny@email.thump",
+        assertEquals("llama002@maildrop.cc",
             userService.update(u2,
                 103L)
                 .getUseremails()
-                .get(2)
+                .get(0)
                 .getUseremail());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void updateAuthorizedToMakeChange()
     {
-        Role r2 = new Role("user");
-        r2.setRoleid(2);
+        Role r4 = new Role("user");
+        r4.setRoleid(4);
 
-        User u2 = new User("cinnamon");
-        u2.getRoles()
-            .add(new UserRoles(u2,
-                r2));
+        User u7 = new User("llama007@maildrop.cc");
+        u7.getRoles()
+            .add(new UserRoles(u7,
+                r4));
 
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "cinnamon@mymail.thump"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "hops@mymail.thump"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.thump"));
+        u7.getUseremails()
+            .add(new Useremail(u7,
+                "llama007@maildrop.cc"));
 
-        Mockito.when(roleService.findRoleById(2))
-            .thenReturn(r2);
+        Mockito.when(roleService.findRoleById(4))
+            .thenReturn(r4);
 
-        Mockito.when(userrepos.findById(103L))
-            .thenReturn(Optional.of(u2));
+        Mockito.when(userrepos.findById(107L))
+            .thenReturn(Optional.of(u7));
 
         Mockito.when(helperFunctions.isAuthorizedToMakeChange(anyString()))
             .thenReturn(false);
 
         Mockito.when(userrepos.save(any(User.class)))
-            .thenReturn(u2);
+            .thenReturn(u7);
 
-        assertEquals("bunny@email.thump",
-            userService.update(u2,
-                103L)
+        assertEquals("llama007@maildrop.cc",
+            userService.update(u7,
+                107L)
                 .getUseremails()
-                .get(2)
+                .get(0)
                 .getUseremail());
     }
 
@@ -452,7 +407,7 @@ public class UserServiceImplUnitTestNoDB
             .deleteAll();
 
         userService.deleteAll();
-        assertEquals(5,
+        assertEquals(4,
             userList.size());
 
     }

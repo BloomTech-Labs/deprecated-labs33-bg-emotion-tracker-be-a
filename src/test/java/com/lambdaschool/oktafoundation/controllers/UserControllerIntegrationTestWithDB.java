@@ -34,8 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = OktaFoundationApplicationTest.class)
 @AutoConfigureMockMvc
-@WithMockUser(username = "admin",
-    roles = {"USER", "ADMIN"})
+@WithMockUser(username = "llama001@maildrop.cc",
+    roles = {"SUPERADMIN"})
 public class UserControllerIntegrationTestWithDB
 {
     @Autowired
@@ -78,7 +78,7 @@ public class UserControllerIntegrationTestWithDB
         this.mockMvc.perform(get("/users/users"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("cinnamon")));
+            .andExpect(content().string(containsString("llama001")));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class UserControllerIntegrationTestWithDB
         this.mockMvc.perform(get("/users/getuserinfo"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("admin")));
+            .andExpect(content().string(containsString("llama001")));
     }
 
     @Test
@@ -96,10 +96,10 @@ public class UserControllerIntegrationTestWithDB
                                   Exception
     {
         this.mockMvc.perform(get("/users/user/name/like/{userName}",
-            "kitty"))
+            "lla"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("misskitty")));
+            .andExpect(content().string(containsString("llama001")));
     }
 
     @Test
@@ -107,10 +107,10 @@ public class UserControllerIntegrationTestWithDB
                               Exception
     {
         this.mockMvc.perform(get("/users/user/{userid}",
-            4))
+            6))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("admin")));
+            .andExpect(content().string(containsString("llama002")));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class UserControllerIntegrationTestWithDB
                                       Exception
     {
         this.mockMvc.perform(get("/users/user/{userid}",
-            100))
+            999))
             .andDo(print())
             .andExpect(status().is4xxClientError())
             .andExpect(content().string(containsString("ResourceNotFoundException")));
@@ -129,10 +129,10 @@ public class UserControllerIntegrationTestWithDB
                                 Exception
     {
         this.mockMvc.perform(get("/users/user/name/{userName}",
-            "admin"))
+            "llama003@maildrop.cc"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("admin")));
+            .andExpect(content().string(containsString("llama003@maildrop.cc")));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class UserControllerIntegrationTestWithDB
                                         Exception
     {
         this.mockMvc.perform(get("/users/user/name/{userName}",
-            "rabbit"))
+            "lambda"))
             .andDo(print())
             .andExpect(status().is4xxClientError())
             .andExpect(content().string(containsString("ResourceNotFoundException")));
@@ -151,7 +151,7 @@ public class UserControllerIntegrationTestWithDB
                                  Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.post("/users/user")
-            .content("{\"username\": \"Ginger\"}")
+            .content("{\"username\": \"llama009@maildrop.cc\"}")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -165,7 +165,7 @@ public class UserControllerIntegrationTestWithDB
                                 Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.put("/users/user/11")
-            .content("{\"username\": \"stumps\"}")
+            .content("{\"username\": \"testllama007@maildrop.cc\"}")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -177,7 +177,7 @@ public class UserControllerIntegrationTestWithDB
                                  Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/user/{id}",
-            13))
+            11))
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
     }
@@ -187,7 +187,7 @@ public class UserControllerIntegrationTestWithDB
                                          Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/user/{id}",
-            100))
+            999))
             .andDo(print())
             .andExpect(status().is4xxClientError());
     }
@@ -197,8 +197,8 @@ public class UserControllerIntegrationTestWithDB
                              Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.patch("/users/user/{userid}",
-            7)
-            .content("{\"username\": \"EATEATEAT\"}")
+            10)
+            .content("{\"username\": \"testllama006@maildrop.cc\"}")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
