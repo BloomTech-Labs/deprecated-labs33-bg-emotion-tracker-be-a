@@ -14,14 +14,14 @@
 
 ## Type of change
 
-- [] New feature
-- [] Bug fix
-- [] Design change
-- [] Modified existing code
+- [ ] New feature
+- [ ] Bug fix
+- [ ] Design change
+- [ ] Modified existing code
 
 
 ## Minimum reviewers
-- [] 2 reviewers
+- [ ] 2 reviewers
 
 ## Testing
-- [] Testing completed
+- [ ] Testing completed
