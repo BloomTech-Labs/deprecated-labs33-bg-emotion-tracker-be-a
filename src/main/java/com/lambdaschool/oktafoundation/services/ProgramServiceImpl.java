@@ -1,8 +1,11 @@
 package com.lambdaschool.oktafoundation.services;
 
+import com.lambdaschool.oktafoundation.exceptions.ResourceFoundException;
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
+import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.ClubPrograms;
 import com.lambdaschool.oktafoundation.models.Program;
+import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +37,18 @@ public class ProgramServiceImpl
     }
 
     @Override
-    public Program findProgramById(long id) throws ResourceNotFoundException {
+    public Program findProgramById(long id) {
         return programrepos.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Program id " + id + " not found!"))
+            .orElseThrow(() -> new ResourceNotFoundException("Program id " + id + " not found!"));
     }
 
     @Override
-    public Program findProgramByName(String name) throws ResourceNotFoundException{
-        Program program = programrepos.findByName(name);
-        if(program == null){
+    public Program findByName(String name) throws ResourceNotFoundException{
+        Program pr = programrepos.findByNameIgnoreCase(name);
+        if(pr == null){
             throw new ResourceNotFoundException("Program " + name + " not found!");
         }
-        return program;
+        return pr;
     }
 
     @Transactional
@@ -62,35 +65,27 @@ public class ProgramServiceImpl
     @Transactional
     @Override
     public Program save(Program program) {
-        Program newProgram = new Program();
-        if(program.getProgramid() != 0){
-            programrepos.findById(program.getProgramid())
-                .orElseThrow(()-> new ResourceNotFoundException("Program id " + program.getProgramid() + " not found!"));
-            newProgram.setProgramid(program.getProgramid());
+        if (program.getClubs()
+            .size() > 0)
+        {
+            throw new ResourceFoundException("Club Programs are not updated through Program.");
         }
 
-        newProgram.setName(program.getName());
-        newProgram.getClubs().clear();
-        for(Club c : program.getClubs()){
-            newProgram.getClubs().add(new Club(c.getClubId(),newProgram));
-        }
-        return programrepos.save(newProgram);
+        return programrepos.save(program);
     }
 
     @Override
     public Program update(Program program, long id) {
-        Program currentProgram = programrepos.findById(id)
-            .orElseThrow(()-> new ResourceNotFoundException("Program " + id + " not found!"));
-        if(program.getName()!=null){
-            currentProgram.setName(program.getName());
+        if(program.getName() == null){
+            throw new ResourceNotFoundException("No program name found to update!");
         }
         if(program.getClubs().size() > 0){
-            for(ClubPrograms cp : program.getClubs()){
-                Program newProgram = clubrepos.findById(cp.getClub().getClubid())
-                    .orElseThrow(()-> new ResourceNotFoundException("Club id " + cp.getClub().getClubid() + " not found!"));
-                currentProgram.getClubs().add(new ClubPrograms(currentProgram, newClub));
-            }
+            throw new ResourceFoundException("Club Programs are not updated through Programs.");
         }
-        return programrepos.save(currentProgram);
+
+        Program newProgram = findProgramById(id);
+        programrepos.updateProgram(userAuditing.getCurrentAuditor().get(),
+            id, program.getName());
+        return findProgramById(id);
     }
 }
