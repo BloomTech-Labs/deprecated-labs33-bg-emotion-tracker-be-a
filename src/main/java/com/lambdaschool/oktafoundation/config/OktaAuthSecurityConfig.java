@@ -38,13 +38,13 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
             .permitAll()
             .antMatchers(HttpMethod.POST,
                 "/users/**")
-            .hasAnyRole("ADMIN")
+            .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.DELETE,
                 "/users/**")
-            .hasAnyRole("ADMIN")
+            .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.PUT,
                 "/users/**")
-            .hasAnyRole("ADMIN")
+            .hasAnyRole("SUPERADMIN, CLUBDIR")
 
             // *** NOTE AUTHENTICATED CAN READ USERS!!! PATCHES are handled in UserService
             .antMatchers("/users/**")
@@ -53,7 +53,7 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
             .antMatchers("/useremails/**")
             .authenticated()
             .antMatchers("/roles/**")
-            .hasAnyRole("ADMIN")
+            .hasAnyRole("SUPERADMIN, CLUBDIR")
 
             // *** Endpoints not specified above are automatically denied
             .anyRequest()

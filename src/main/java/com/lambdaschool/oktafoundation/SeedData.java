@@ -53,50 +53,62 @@ public class SeedData
     public void run(String[] args) throws
                                    Exception
     {
+        userService.deleteAll();
         roleService.deleteAll();
-        Role r1 = new Role("admin");
-        Role r2 = new Role("user");
-        Role r3 = new Role("data");
+        Role r1 = new Role("superadmin");
+        Role r2 = new Role("clubdir");
+        Role r3 = new Role("ydp");
+        Role r4 = new Role("user");
 
         r1 = roleService.save(r1);
         r2 = roleService.save(r2);
         r3 = roleService.save(r3);
+        r4 = roleService.save(r4);
 
+        // Super Admin
         User u1 = new User("llama001@maildrop.cc");
         u1.getRoles()
             .add(new UserRoles(u1,
                 r1));
         userService.save(u1);
 
-        User u2 = new User("barnbarn@maildrop.cc");
+
+        // Club Directors
+        User u2 = new User("llama002@maildrop.cc");
         u2.getRoles()
             .add(new UserRoles(u2,
                 r2));
         userService.save(u2);
 
-        // The following is an example user!
-        /*
-        // admin, data, user
-        User u1 = new User("admin",
-            "password",
-            "admin@lambdaschool.local");
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r1));
-        u1.getRoles()
-            .add(new UserRoles(u1,
+        User u3 = new User("llama003@maildrop.cc");
+        u3.getRoles()
+            .add(new UserRoles(u3,
                 r2));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r3));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@email.local"));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@mymail.local"));
+        userService.save(u3);
 
-        userService.save(u1);
-        */
+        User u4 = new User("llama004@maildrop.cc");
+        u4.getRoles()
+            .add(new UserRoles(u4,
+                r2));
+        userService.save(u4);
+
+        // Youth Development Professionals
+        User u5 = new User("llama005@maildrop.cc");
+        u5.getRoles()
+            .add(new UserRoles(u5,
+                r3));
+        userService.save(u5);
+
+        User u6 = new User("llama006@maildrop.cc");
+        u6.getRoles()
+            .add(new UserRoles(u6,
+                r3));
+        userService.save(u6);
+
+        User u7 = new User("llama007@maildrop.cc");
+        u7.getRoles()
+            .add(new UserRoles(u7,
+                r3));
+        userService.save(u7);
     }
 }
