@@ -7,11 +7,9 @@ import java.util.List;
 public interface ProgramService {
     List<Program> findAll();
 
-    List<Program> findByClubId(long clubId);
-
     Program findProgramById(long id);
 
-    Program findProgramByName(String name);
+    Program findByName(String name);
 
     void delete(long id);
 
