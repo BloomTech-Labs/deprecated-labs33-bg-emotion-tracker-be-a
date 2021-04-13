@@ -1,6 +1,6 @@
 package com.lambdaschool.oktafoundation.models;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,15 +19,15 @@ public class Program extends Auditable{
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "programs", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "programs", allowSetters = true)
+    @OneToMany(mappedBy = "programs", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties (value = "programs", allowSetters = true)
     private Set<ClubPrograms> clubs = new HashSet<>();
 
     public Program() {
     }
 
     public Program(String name) {
-        this.name = name.toUpperCase();
+        this.name = name.toLowerCase();
     }
 
     public long getProgramid() {
@@ -43,7 +43,7 @@ public class Program extends Auditable{
     }
 
     public void setName(String name) {
-        this.name = name.toUpperCase();
+        this.name = name.toLowerCase();
     }
 
     public Set<ClubPrograms> getClubs() {
