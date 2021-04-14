@@ -1,6 +1,5 @@
 package com.lambdaschool.oktafoundation.services;
 
-import com.github.javafaker.Bool;
 import com.lambdaschool.oktafoundation.models.Member;
 
 import java.io.IOException;
