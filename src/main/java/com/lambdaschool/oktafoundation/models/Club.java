@@ -21,7 +21,7 @@ public class Club extends Auditable
     @Column(unique = true)
     private String clubname;
 
-    private int clubdirector;
+    private String clubdirector;
 
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "club",
@@ -35,7 +35,7 @@ public class Club extends Auditable
     {
     }
 
-    public Club(@NotNull String clubname, int clubdirector)
+    public Club(@NotNull String clubname, String clubdirector)
     {
         this.clubname = clubname;
         this.clubdirector = clubdirector;
@@ -53,7 +53,19 @@ public class Club extends Auditable
         this.clubname = clubname;
     }
 
-    public int getClubdirector() { return clubdirector; }
+    public String getClubdirector() {
+        return clubdirector;
+    }
 
-    public void setClubdirector(int clubdirector) { this.clubdirector = clubdirector; }
+    public void setClubdirector(String clubdirector) {
+        this.clubdirector = clubdirector;
+    }
+
+    public Set<ClubPrograms> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<ClubPrograms> roles) {
+        this.roles = roles;
+    }
 }
