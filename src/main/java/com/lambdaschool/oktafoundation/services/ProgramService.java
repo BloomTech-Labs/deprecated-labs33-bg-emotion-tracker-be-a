@@ -15,6 +15,6 @@ public interface ProgramService {
 
     Program save(Program program);
 
-    Program update(Program program, long id);
+    Program update(long id, Program newProgram);
 
 }

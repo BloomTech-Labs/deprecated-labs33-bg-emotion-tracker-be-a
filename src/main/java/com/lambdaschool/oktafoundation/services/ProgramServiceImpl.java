@@ -75,7 +75,7 @@ public class ProgramServiceImpl
     }
 
     @Override
-    public Program update(Program program, long id) {
+    public Program update(long id, Program program) {
         if(program.getName() == null){
             throw new ResourceNotFoundException("No program name found to update!");
         }
