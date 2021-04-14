@@ -23,14 +23,6 @@ public class Club extends Auditable
 
     private String clubdirector;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            mappedBy = "club",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonIgnoreProperties(value = "club",
-            allowSetters = true)
-    private Set<ClubPrograms> roles = new HashSet<>();
-
     public Club()
     {
     }
@@ -61,11 +53,4 @@ public class Club extends Auditable
         this.clubdirector = clubdirector;
     }
 
-    public Set<ClubPrograms> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<ClubPrograms> roles) {
-        this.roles = roles;
-    }
 }
