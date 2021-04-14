@@ -4,7 +4,6 @@ import com.lambdaschool.oktafoundation.OktaFoundationApplicationTest;
 import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.repository.MemberRepository;
 
-import org.h2.util.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,12 +18,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
