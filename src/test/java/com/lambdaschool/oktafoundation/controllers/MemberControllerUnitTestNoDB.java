@@ -134,7 +134,7 @@ public class MemberControllerUnitTestNoDB {
             .file(testFile))
             .andExpect(status().is2xxSuccessful());
     }
-    
+
     @Test
     public void uploadNoNewMembers() throws Exception
     {
