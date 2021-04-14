@@ -2,10 +2,9 @@ package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.OktaFoundationApplicationTest;
 import com.lambdaschool.oktafoundation.models.Member;
-import com.lambdaschool.oktafoundation.models.Role;
-import com.lambdaschool.oktafoundation.models.User;
-import com.lambdaschool.oktafoundation.models.UserRoles;
 import com.lambdaschool.oktafoundation.repository.MemberRepository;
+
+import org.h2.util.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,11 +15,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OktaFoundationApplicationTest.class,
@@ -68,5 +73,38 @@ public class MemberServiceImplUnitTestNoDB
     @Test
     public void save()
     {
+        Member m1 = new Member();
+        m1.setMemberid("M12345ID");
+
+        Mockito.when(memberRepository.save(any(Member.class)))
+            .thenReturn(m1);
+
+        assertEquals("M12345ID",
+            memberService.save(m1)
+                .getMemberid());
+    }
+
+
+
+    @Test
+    public void saveNewMembers() throws IOException
+    {
+        Member m1 = new Member();
+        m1.setMemberid("M12345ID");
+        String memberid = "M12345ID";
+
+        BufferedReader bufferedReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(bufferedReader.readLine()).thenReturn(memberid);
+
+        Mockito.when(memberRepository.findMemberByMemberid(memberid))
+            .thenReturn(null);
+        Mockito.when(memberRepository.save(any(Member.class)))
+            .thenReturn(m1);
+        String testString = "memberid\nM12345ID";
+        InputStream testStream = new ByteArrayInputStream(testString.getBytes());
+
+        assertEquals(1,
+            (memberService.saveNewMembers(testStream)).size());
+
     }
 }
