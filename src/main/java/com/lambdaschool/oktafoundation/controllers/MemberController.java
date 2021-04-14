@@ -1,10 +1,8 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.Member;
-import com.lambdaschool.oktafoundation.models.User;
 import com.lambdaschool.oktafoundation.repository.MemberRepository;
 import com.lambdaschool.oktafoundation.services.MemberService;
-import com.lambdaschool.oktafoundation.utils.CsvUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -28,7 +25,7 @@ public class MemberController
     @Autowired
     MemberService memberService;
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN, CLUBDIR')")
     @GetMapping(value = "/members",
             produces = "application/json")
     public ResponseEntity<?> listAllMembers()
@@ -38,10 +35,19 @@ public class MemberController
                 HttpStatus.OK);
     }
 
-    @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public void uploadSimple(MultipartFile csvfile)throws Exception {
-        System.out.println(csvfile);
-        memberRepository.saveAll(CsvUtils.read(Member.class, csvfile.getInputStream()));
+    @PreAuthorize("hasAnyRole('SUPERADMIN, CLUBDIR')")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = "application/json")
+    public ResponseEntity<?> uploadMembers(MultipartFile csvfile) throws Exception
+    {
+        List<Member> addedMembers = memberService.saveNewMembers(csvfile.getInputStream());
+        if ( addedMembers.size() < 1 )
+        {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>(addedMembers, HttpStatus.CREATED);
+        }
     }
 
 }
