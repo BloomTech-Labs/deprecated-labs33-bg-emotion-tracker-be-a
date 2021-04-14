@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "clubs")
@@ -13,32 +15,35 @@ public class Club extends Auditable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long clubid;
 
     @NotNull
     @Column(unique = true)
     private String clubname;
 
-    private String location;
+    private String clubdirector;
 
+    @OneToMany(fetch = FetchType.EAGER,
+            mappedBy = "club",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties(value = "club",
+            allowSetters = true)
+    private Set<ClubPrograms> roles = new HashSet<>();
 
     public Club()
     {
     }
 
-    public Club(@NotNull String clubname, String location)
+    public Club(@NotNull String clubname, String clubdirector)
     {
         this.clubname = clubname;
-        this.location = location;
+        this.clubdirector = clubdirector;
     }
 
-    public long getId() {
-        return id;
-    }
+    public long getClubid() { return clubid; }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public void setClubid(long clubid) { this.clubid = clubid; }
 
     public String getClubname() {
         return clubname;
@@ -48,12 +53,19 @@ public class Club extends Auditable
         this.clubname = clubname;
     }
 
-    public String getLocation() {
-        return location;
+    public String getClubdirector() {
+        return clubdirector;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setClubdirector(String clubdirector) {
+        this.clubdirector = clubdirector;
     }
 
+    public Set<ClubPrograms> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<ClubPrograms> roles) {
+        this.roles = roles;
+    }
 }
