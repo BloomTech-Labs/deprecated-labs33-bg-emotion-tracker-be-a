@@ -40,7 +40,7 @@ public class ProgramController {
      * @return JSON object of the program you seek
      * @see ProgramService#findProgramById(long) ProgramService.findProgramById(long programId)
      */
-    @GetMapping(value = "/program/{programId}",
+    @GetMapping(value = "/program/{programid}",
         produces = "application/json")
     public ResponseEntity<?> getProgramById(@PathVariable Long programId){
         Program p = programService.findProgramById(programId);
@@ -53,7 +53,7 @@ public class ProgramController {
      * @return JSON object of the program you seek
      * @see ProgramService#findByName(String) ProgramService.findByName(String programName)
      */
-    @GetMapping(value = "/program/name/{programName}",
+    @GetMapping(value = "/program/name/{programname}",
         produces = "applcation/json")
     public ResponseEntity<?> getProgramByName(@PathVariable String programName){
         Program p = programService.findByName(programName);
@@ -93,7 +93,7 @@ public class ProgramController {
      */
     @PutMapping(value = "/program/{programid}",
         consumes = {"application/json"})
-    public ResponseEntity<?> putUpdateProgram(
+    public ResponseEntity<?> updateProgram(
         @PathVariable
             long programid,
         @Valid
