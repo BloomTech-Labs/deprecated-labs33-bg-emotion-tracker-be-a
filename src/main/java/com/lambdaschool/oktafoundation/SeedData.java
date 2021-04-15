@@ -1,8 +1,10 @@
 package com.lambdaschool.oktafoundation;
 
+import com.lambdaschool.oktafoundation.models.Program;
 import com.lambdaschool.oktafoundation.models.Role;
 import com.lambdaschool.oktafoundation.models.User;
 import com.lambdaschool.oktafoundation.models.UserRoles;
+import com.lambdaschool.oktafoundation.services.ProgramService;
 import com.lambdaschool.oktafoundation.services.RoleService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class SeedData
     @Autowired
     UserService userService;
 
+    @Autowired
+    ProgramService programService;
+
     /**
      * Generates test, seed data for our application
      * First a set of known data is seeded into our database.
@@ -55,6 +60,7 @@ public class SeedData
     {
         userService.deleteAll();
         roleService.deleteAll();
+        programService.deleteAll();
         Role r1 = new Role("superadmin");
         Role r2 = new Role("clubdir");
         Role r3 = new Role("ydp");
@@ -64,6 +70,14 @@ public class SeedData
         r2 = roleService.save(r2);
         r3 = roleService.save(r3);
         r4 = roleService.save(r4);
+
+        Program p1 = new Program("Football");
+        Program p2 = new Program("BasketBall");
+        Program p3 = new Program("BaseBall");
+
+        p1 = programService.save(p1);
+        p2 = programService.save(p2);
+        p3 = programService.save(p3);
 
         // Super Admin
         User u1 = new User("llama001@maildrop.cc");
