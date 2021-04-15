@@ -62,7 +62,7 @@ public class ClubPrograms
             return false;
         }
         ClubPrograms that = (ClubPrograms) o;
-        return ((club == null) ? 0 : club.getClubId()) == ((that.club == null) ? 0 : that.club.getClubId()) &&
+        return ((club == null) ? 0 : club.getId()) == ((that.club == null) ? 0 : that.club.getId()) &&
             ((program == null) ? 0 : program.getProgramid()) == ((that.program == null) ? 0 : that.program.getProgramid());
     }
 

@@ -53,6 +53,13 @@ public class ProgramServiceImpl
 
     @Transactional
     @Override
+    public void deleteAll()
+    {
+        programrepos.deleteAll();
+    }
+
+    @Transactional
+    @Override
     public void delete(long id) {
         if(programrepos.findById(id)
             .isPresent()){

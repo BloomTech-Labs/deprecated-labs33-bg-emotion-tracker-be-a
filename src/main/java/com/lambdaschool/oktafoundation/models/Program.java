@@ -19,8 +19,8 @@ public class Program extends Auditable{
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "programs", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties (value = "programs", allowSetters = true)
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties (value = "program", allowSetters = true)
     private Set<ClubPrograms> clubs = new HashSet<>();
 
     public Program() {

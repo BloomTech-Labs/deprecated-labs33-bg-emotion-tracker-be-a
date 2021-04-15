@@ -11,6 +11,8 @@ public interface ProgramService {
 
     Program findByName(String name);
 
+    void deleteAll();
+
     void delete(long id);
 
     Program save(Program program);
