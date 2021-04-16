@@ -45,10 +45,12 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                 "/members/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.DELETE,
-                "/users/**")
+                "/users/**",
+                    "/members/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.PUT,
-                "/users/**")
+                "/users/**",
+                    "/members/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
 
             // *** NOTE AUTHENTICATED CAN READ USERS!!! PATCHES are handled in UserService
