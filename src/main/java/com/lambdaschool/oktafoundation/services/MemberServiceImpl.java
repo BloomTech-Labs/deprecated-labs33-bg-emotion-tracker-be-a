@@ -49,8 +49,6 @@ public class MemberServiceImpl implements MemberService
         return addedMember;
     }
 
-
-
     @Transactional
     @Override
     public List<Member> saveNewMembers(InputStream stream) throws IOException
@@ -58,24 +56,24 @@ public class MemberServiceImpl implements MemberService
         List<Member> newMembers = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String member;
+        // removes header line from CSV file
+        String headerLine = reader.readLine();
         while((member = reader.readLine())!= null)
         {
-            member = member.replace("\n", "");
-            if(! (member.equals("memberid") || member.equals("\n")))
+
+            Member isCurrentMember = memberRepository.findMemberByMemberid(member);
+            if ( isCurrentMember == null )
             {
-                Member isCurrentMember = memberRepository.findMemberByMemberid(member);
-                if ( isCurrentMember == null )
-                {
-                    Member newMember = new Member();
-                    newMember.setMemberid(member);
-                    Member addedMember = save(newMember);
-                    newMembers.add(addedMember);
-                }
+                Member newMember = new Member();
+                newMember.setMemberid(member);
+                Member addedMember = save(newMember);
+                newMembers.add(addedMember);
             }
+
         }
         return newMembers;
     }
-    // new code starts here
+
     @Override
     public Member findMemberByJavaId(long id)
     {
