@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,6 +87,7 @@ public class MemberControllerUnitTestNoDB {
         Member mem1 = new Member(1, "Test001");
         Member mem2 = new Member(2, "Test002");
         Member mem3 = new Member(3, "Test003");
+
         memberList.add(mem1);
         memberList.add(mem2);
         memberList.add(mem3);
@@ -150,5 +152,131 @@ public class MemberControllerUnitTestNoDB {
         mockMvc.perform(MockMvcRequestBuilders.multipart(apiUrl)
             .file(testFile))
             .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void addNewMember() throws Exception
+    {
+        String apiUrl = "/members/member";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(memberService.saveNewMember("M12345ID")).thenReturn(memberList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.post(apiUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("M12345ID");
+
+        mockMvc.perform(rb)
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void getMemberbyJavaID() throws Exception
+    {
+        String apiUrl = "/members/member/1";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(memberService.findMemberByJavaId(1L))
+                .thenReturn(memberList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
+                .accept(MediaType.APPLICATION_JSON);
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn(); // this could throw an exception
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(memberList.get(0));
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List",
+                er,
+                tr);
+    }
+
+    @Test
+    public void getMemberbyMemberID() throws Exception
+    {
+        String apiUrl = "/members/member/id/m12";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(memberService.findMemberByStringId("m12"))
+                .thenReturn(memberList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(memberList.get(0));
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List",
+                er,
+                tr);
+
+    }
+
+    @Test
+    public void getMemberLikeID() throws Exception
+    {
+        String apiUrl = "/members/member/id/like/m12";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(memberService.findByIdContaining(any(String.class)))
+                .thenReturn(memberList);
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn(); // this could throw an exception
+
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(memberList);
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List",
+                er,
+                tr);
+    }
+
+    @Test
+    public void deleteMemberByJavaId() throws Exception
+    {
+        String apiUrl = "/members/member/1";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(rb)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print());
     }
 }

@@ -51,13 +51,14 @@ public class MemberController {
             produces = "application/json")
     public ResponseEntity<?> getMemberByJavaId(
             @PathVariable
-                    Long javaId) {
+                    Long javaId)
+    {
         Member m = memberService.findMemberByJavaId(javaId);
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('SUPERADMIN, CLUBDIR')")
-    @GetMapping(value = "/member/{memberId}",
+    @GetMapping(value = "/member/id/{memberId}",
             produces = "application/json")
     public ResponseEntity<?> getMemberByMemberId(
             @PathVariable String memberId) {
