@@ -1,23 +1,31 @@
 package com.lambdaschool.oktafoundation.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.mail.imap.protocol.ID;
-
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+@ApiModel(value="Member",
+            description = "A member record with primary key id and a memberid string")
 @Entity
 @Table(name = "members")
 public class Member extends Auditable
 {
+    @ApiModelProperty(name = "id",
+        value = "primary key for member",
+        required = true,
+        example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ApiModelProperty(name = "memberid",
+        value = "bg club memberid string",
+        required = true,
+        example = "m1234567id")
     @NotNull
     @Column(unique = true)
     private String memberid;
-
-
 
     public Member()
     {
