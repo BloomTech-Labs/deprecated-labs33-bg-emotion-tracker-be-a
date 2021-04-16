@@ -45,13 +45,13 @@ public class Swagger2Config
      */
     private ApiInfo apiEndPointsInfo()
     {
-        return new ApiInfoBuilder().title("Java Spring BE Foundation")
-            .description("Java Spring Backend Foundation and Scaffolding")
-            .contact(new Contact("John Mitchell",
+        return new ApiInfoBuilder().title("BG Emotion Tracker BE A")
+            .description("Boys and Girls Club Emotion Tracker Back End RDBMS")
+            .contact(new Contact("Ryan Hamblin",
                 "http://www.lambdaschool.com",
-                "john@lambdaschool.com"))
+                "ryan.hamblin@lambdaschool.com"))
             .license("MIT")
-            .licenseUrl("https://github.com/LambdaSchool/java-springfoundation/blob/master/LICENSE")
+            .licenseUrl("https://github.com/Lambda-School-Labs/bg-emotion-tracker-be-a/blob/main/LICENSE")
             .version("1.0.0")
             .build();
     }
