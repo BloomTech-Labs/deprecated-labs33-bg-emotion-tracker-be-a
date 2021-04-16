@@ -26,7 +26,7 @@ public class Member extends Auditable
     @NotNull
     @Column(unique = true)
     private String memberid;
-    
+
     public Member()
     {
     }
