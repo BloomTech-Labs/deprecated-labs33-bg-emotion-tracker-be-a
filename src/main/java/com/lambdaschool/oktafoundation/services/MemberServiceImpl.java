@@ -2,7 +2,6 @@ package com.lambdaschool.oktafoundation.services;
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.repository.MemberRepository;
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +9,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.module.ResolutionException;
 import java.util.ArrayList;
 import java.util.List;
+
 @Transactional
 @Service(value = "memberService")
 public class MemberServiceImpl implements MemberService
@@ -60,6 +59,8 @@ public class MemberServiceImpl implements MemberService
         String headerLine = reader.readLine();
         while((member = reader.readLine())!= null)
         {
+            // removes any quotes if needed from ends of memberid in CSV file
+            member = member.replaceAll("^\"|\"$", "");
 
             Member isCurrentMember = memberRepository.findMemberByMemberid(member);
             if ( isCurrentMember == null )
