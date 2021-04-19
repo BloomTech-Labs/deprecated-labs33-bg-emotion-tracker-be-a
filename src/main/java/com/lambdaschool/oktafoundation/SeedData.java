@@ -122,7 +122,7 @@ public class SeedData
         User u7 = new User("llama007@maildrop.cc");
         u7.getRoles()
             .add(new UserRoles(u7,
-                r3));
+                r4));
         userService.save(u7);
     }
 }
