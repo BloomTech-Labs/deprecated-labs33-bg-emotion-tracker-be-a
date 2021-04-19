@@ -120,7 +120,6 @@ public class MemberServiceImplUnitTestNoDB
 
     }
 
-    // new starts here
     @Test
     public void findMemberByJavaId()
     {
