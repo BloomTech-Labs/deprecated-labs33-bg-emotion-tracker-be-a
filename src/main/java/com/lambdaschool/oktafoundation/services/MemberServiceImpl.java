@@ -43,10 +43,16 @@ public class MemberServiceImpl implements MemberService
     @Override
     public Member saveNewMember(String newMember)
     {
-        Member addedMember = new Member();
-        addedMember.setMemberid(newMember);
-        memberRepository.save(addedMember);
-        return addedMember;
+
+        Member isCurrentMember = memberRepository.findMemberByMemberid(newMember);
+        if ( isCurrentMember == null )
+        {
+            Member addMember = new Member();
+            addMember.setMemberid(newMember);
+            Member addedMember = save(addMember);
+            return addedMember;
+        }
+        return isCurrentMember;
     }
 
     @Transactional
