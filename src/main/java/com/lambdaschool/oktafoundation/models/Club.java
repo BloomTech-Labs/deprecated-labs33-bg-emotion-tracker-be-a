@@ -11,6 +11,7 @@ import java.util.List;
 @Table(name = "clubs")
 public class Club extends Auditable
 {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
