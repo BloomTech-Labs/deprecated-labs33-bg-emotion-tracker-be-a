@@ -36,21 +36,31 @@ public class OktaAuthSecurityConfig extends WebSecurityConfigurerAdapter
                 "/v2/api-docs",
                 "/webjars/**")
             .permitAll()
+            .antMatchers("/users/getuserinfo")
+            .authenticated()
             .antMatchers(HttpMethod.GET,
                 "/users/**",
-                "/members/**")
+                "/members/**",
+                "/clubs/**",
+                "/programs/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.POST,
                 "/users/**",
-                "/members/**")
+                "/members/**",
+                "/clubs/**",
+                "/programs/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.DELETE,
                 "/users/**",
-                    "/members/**")
+                    "/members/**",
+                "/clubs/**",
+                "/programs/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
             .antMatchers(HttpMethod.PUT,
                 "/users/**",
-                    "/members/**")
+                    "/members/**",
+                "/clubs/**",
+                "/programs/**")
             .hasAnyRole("SUPERADMIN, CLUBDIR")
 
             // *** NOTE AUTHENTICATED CAN READ USERS!!! PATCHES are handled in UserService
