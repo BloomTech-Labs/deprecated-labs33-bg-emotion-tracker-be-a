@@ -9,4 +9,6 @@ public interface ClubService
     List<Club> findAll();
 
     Club save(Club club);
+
+    public void deleteAll();
 }
