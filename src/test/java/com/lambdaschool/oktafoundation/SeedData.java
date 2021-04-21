@@ -1,12 +1,8 @@
 package com.lambdaschool.oktafoundation;
 
-import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
-import com.lambdaschool.oktafoundation.models.Role;
-import com.lambdaschool.oktafoundation.models.User;
-import com.lambdaschool.oktafoundation.models.UserRoles;
-import com.lambdaschool.oktafoundation.models.Useremail;
+import com.lambdaschool.oktafoundation.models.*;
+import com.lambdaschool.oktafoundation.services.ClubService;
+import com.lambdaschool.oktafoundation.services.ProgramService;
 import com.lambdaschool.oktafoundation.services.RoleService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Locale;
 
 /**
  * SeedData puts both known and random data into the database. It implements CommandLineRunner.
@@ -45,6 +39,12 @@ public class SeedData
     @Autowired
     UserService userService;
 
+    @Autowired
+    ProgramService programService;
+
+    @Autowired
+    ClubService clubService;
+
     /**
      * Generates test, seed data for our application
      * First a set of known data is seeded into our database.
@@ -61,6 +61,8 @@ public class SeedData
     {
         userService.deleteAll();
         roleService.deleteAll();
+        clubService.deleteAll();
+        programService.deleteAll();
 
         Role r1 = new Role("superadmin");
         Role r2 = new Role("clubdir");
@@ -117,5 +119,52 @@ public class SeedData
             .add(new UserRoles(u7,
                 r4));
         userService.save(u7);
+
+        Program p1 = new Program("Club Checkin");
+        Program p2 = new Program("Club Checkout");
+        Program p3 = new Program("Football");
+        Program p4 = new Program("Basketball");
+        Program p5 = new Program("Baseball");
+
+
+        p1 = programService.save(p1);
+        p2 = programService.save(p2);
+        p3 = programService.save(p3);
+        p4 = programService.save(p4);
+        p5 = programService.save(p5);
+
+        Club c1 = new Club( "club1", "llama002@maildrop.cc");
+        c1.getPrograms()
+            .add(new ClubPrograms(c1,p1));
+        c1.getPrograms()
+            .add(new ClubPrograms(c1,p2));
+        c1.getPrograms()
+            .add(new ClubPrograms(c1,p3));
+        c1.getPrograms()
+            .add(new ClubPrograms(c1,p4));
+        c1.getPrograms()
+            .add(new ClubPrograms(c1,p5));
+        clubService.save(c1);
+
+        Club c2 = new Club( "club2", "llama003@maildrop.cc");
+        c2.getPrograms()
+            .add(new ClubPrograms(c2,p1));
+        c2.getPrograms()
+            .add(new ClubPrograms(c2,p2));
+        c2.getPrograms()
+            .add(new ClubPrograms(c2,p4));
+        clubService.save(c2);
+
+        Club c3 = new Club( "club3",  "llama004@maildrop.cc");
+        c3.getPrograms()
+            .add(new ClubPrograms(c3,p1));
+        c3.getPrograms()
+            .add(new ClubPrograms(c3,p2));
+        c3.getPrograms()
+            .add(new ClubPrograms(c3,p3));
+        c3.getPrograms()
+            .add(new ClubPrograms(c3,p4));
+        clubService.save(c3);
+
     }
 }
