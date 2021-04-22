@@ -2,6 +2,8 @@ package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.models.Program;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public interface ProgramService {
@@ -19,4 +21,5 @@ public interface ProgramService {
 
     Program update(long id, Program newProgram);
 
+    List<Program> saveNewPrograms(InputStream stream) throws IOException;
 }
