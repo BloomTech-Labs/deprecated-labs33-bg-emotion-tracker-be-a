@@ -25,8 +25,7 @@ public class Club extends Auditable
 
     @OneToMany(fetch = FetchType.EAGER,
         mappedBy = "club",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true)
+        cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "club",
         allowSetters = true)
     private Set<ClubPrograms> programs = new HashSet<>();
