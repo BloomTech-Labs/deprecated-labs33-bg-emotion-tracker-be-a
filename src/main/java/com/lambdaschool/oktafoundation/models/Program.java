@@ -19,7 +19,7 @@ public class Program extends Auditable{
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties (value = "program", allowSetters = true)
     private Set<ClubPrograms> clubs = new HashSet<>();
 

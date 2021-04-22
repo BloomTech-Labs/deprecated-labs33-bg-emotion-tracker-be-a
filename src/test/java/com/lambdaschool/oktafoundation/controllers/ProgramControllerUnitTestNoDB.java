@@ -2,10 +2,7 @@ package com.lambdaschool.oktafoundation.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.oktafoundation.OktaFoundationApplicationTest;
-import com.lambdaschool.oktafoundation.models.Program;
-import com.lambdaschool.oktafoundation.models.Role;
-import com.lambdaschool.oktafoundation.models.User;
-import com.lambdaschool.oktafoundation.models.UserRoles;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ProgramRepository;
 import com.lambdaschool.oktafoundation.repository.UserRepository;
 import com.lambdaschool.oktafoundation.services.ProgramService;
@@ -22,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
@@ -33,10 +31,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith (SpringRunner.class)
 @SpringBootTest (webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -79,10 +80,20 @@ public class ProgramControllerUnitTestNoDB {
 
         u1.setUserid(101);
         userList.add(u1);
-
+;
         Program p1 = new Program("volleyball");
         Program p2 = new Program("tennis");
         Program p3 = new Program("softball");
+        p1.setProgramid(10);
+        p2.setProgramid(20);
+        p3.setProgramid(30);
+        p1.getClubs().add(new ClubPrograms(new Club("club1","llama002@maildrop.cc"), p1));
+        p2.getClubs().add(new ClubPrograms(new Club("club1","llama002@maildrop.cc"), p2));
+        p3.getClubs().add(new ClubPrograms(new Club("club1","llama002@maildrop.cc"), p3));
+
+        programList.add(p1);
+        programList.add(p2);
+        programList.add(p3);
 
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -113,5 +124,21 @@ public class ProgramControllerUnitTestNoDB {
         String er = mapper.writeValueAsString(programList);
 
         assertEquals(er, tr);
+    }
+
+    @Test
+    public void uploadPrograms() throws Exception
+    {
+        String apiUrl = "/programs/upload";
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+            .thenReturn(u1);
+
+        Mockito.when(programService.saveNewPrograms(any(InputStream.class)))
+            .thenReturn(programList);
+
+        MockMultipartFile testFile = new MockMultipartFile("csvfile", "programs.csv", "text/csv", "Program Name,Club\nbasketball,club1".getBytes());
+        mockMvc.perform(MockMvcRequestBuilders.multipart(apiUrl)
+            .file(testFile))
+            .andExpect(status().is2xxSuccessful());
     }
 }

@@ -166,5 +166,27 @@ public class SeedData
             .add(new ClubPrograms(c3,p4));
         clubService.save(c3);
 
+        // hard coding club data for addition of programs by csv file
+        // associating programs with clubname for many to many relationship
+        // convert to form, CSV, or integration with stakeholder management system in future release
+
+        Club c4 = new Club( "anderson", "andrew lorenzo");
+        clubService.save(c4);
+        Club c5 = new Club( "grossman", "henry segovia");
+        clubService.save(c5);
+        Club c6 = new Club( "jefferson", "jennifer wissusik");
+        clubService.save(c6);
+        Club c7 = new Club( "johnston", "jennifer wissusik");
+        clubService.save(c7);
+        Club c8 = new Club( "morton", "lisa barron");
+        clubService.save(c8);
+        Club c9 = new Club( "notter", "leslie chicas");
+        clubService.save(c9);
+        Club c10 = new Club( "catlin", "");
+        clubService.save(c10);
+        Club c11 = new Club( "marley", "");
+        clubService.save(c11);
+        Club c12 = new Club( "stelle", "");
+        clubService.save(c12);
     }
 }

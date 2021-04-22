@@ -1,12 +1,15 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.Program;
 import com.lambdaschool.oktafoundation.services.ProgramService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -57,29 +60,15 @@ public class ProgramController {
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
-    /**
-     * Given a complete Program object, create a new Program record
-     * @param newProgram
-     * @return A location header with the URI to the newly created program
-     * @see ProgramService#save(Program) ProgramService.save(Program)
-     */
-    @PostMapping(value = "program",
-        consumes = "application/json")
-    public ResponseEntity<?> addNewProgram(
-        @Valid
-        @RequestBody
-            Program newProgram){
-        newProgram.setProgramid(0);
-        newProgram = programService.save(newProgram);
-        //set the location header for the newly created resource
-        HttpHeaders responseHeaders = new HttpHeaders();
-        URI newProgramURI = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{progamid}")
-            .buildAndExpand(newProgram.getProgramid())
-            .toUri();
-        responseHeaders.setLocation(newProgramURI);
-
-        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = "application/json")
+    public ResponseEntity<?> uploadPrograms(
+            MultipartFile csvfile) throws Exception {
+        List<Program> addedPrograms = programService.saveNewPrograms(csvfile.getInputStream());
+        if (addedPrograms.size() < 1) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(addedPrograms, HttpStatus.CREATED);
+        }
     }
 
     /**
