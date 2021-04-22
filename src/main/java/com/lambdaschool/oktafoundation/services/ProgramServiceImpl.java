@@ -6,6 +6,7 @@ import com.lambdaschool.oktafoundation.models.Club;
 import com.lambdaschool.oktafoundation.models.ClubPrograms;
 
 import com.lambdaschool.oktafoundation.models.Program;
+import com.lambdaschool.oktafoundation.models.UserRoles;
 import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,7 +158,20 @@ public class ProgramServiceImpl
             }
 
             // verify program is not already associated with this club
-            if (!pr.getClubs().contains(cl))
+            // loop through all the programs clubs
+            // if any clubprogram has the clubname being added
+            // set the boolean flag to false
+            // if after the loop, boolean is true
+            // add the new relationship
+            boolean isNewClubProgram = true;
+            for (ClubPrograms cp : pr.getClubs())
+            {
+                if(cp.getClub().getClubname().equalsIgnoreCase(cl.getClubname())){
+                    isNewClubProgram = false;
+                }
+            }
+
+            if (isNewClubProgram)
             {
                 pr.getClubs()
                     .add(new ClubPrograms(cl,
