@@ -1,7 +1,10 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.OktaFoundationApplicationTest;
+import com.lambdaschool.oktafoundation.models.Club;
+import com.lambdaschool.oktafoundation.models.Member;
 import com.lambdaschool.oktafoundation.models.Program;
+import com.lambdaschool.oktafoundation.repository.ClubRepository;
 import com.lambdaschool.oktafoundation.repository.ProgramRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -14,6 +17,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import static junit.framework.TestCase.assertEquals;
@@ -29,6 +35,9 @@ public class ProgramServiceImplUnitTestNoDB {
 
     @MockBean
     ProgramRepository programrepos;
+
+    @MockBean
+    ClubRepository clubrepos;
 
     private List<Program> programList = new ArrayList<>();
 
@@ -65,5 +74,39 @@ public class ProgramServiceImplUnitTestNoDB {
             .thenReturn(p1);
 
         assertEquals("track", programService.save(p1).getName());
+    }
+
+    @Test
+    public void saveNewPrograms() throws IOException{
+        String programname = "guitar lessons";
+        String clubname = "club1";
+        String datarow = programname + "," + clubname;
+
+        Program newprogram = new Program();
+        newprogram.setName(programname);
+        newprogram.setProgramid(10);
+
+        Club currentclub = new Club();
+        currentclub.setClubname("club1");
+        currentclub.setClubdirector("");
+        currentclub.setClubid(100);
+
+        BufferedReader bufferedReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(bufferedReader.readLine()).thenReturn(datarow);
+
+        Mockito.when(clubrepos.findByClubnameIgnoreCase(clubname))
+            .thenReturn(currentclub);
+
+        Mockito.when(programrepos.findByNameIgnoreCase(programname))
+            .thenReturn(null);
+
+        Mockito.when(programrepos.save(any(Program.class)))
+            .thenReturn(newprogram);
+
+        String testString = "Program Name,Club\nguitarlessons,club1";
+        InputStream testStream = new ByteArrayInputStream(testString.getBytes());
+
+        assertEquals(1,
+            (programService.saveNewPrograms(testStream)).size());
     }
 }
