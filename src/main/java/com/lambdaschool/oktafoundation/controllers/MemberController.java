@@ -175,8 +175,8 @@ public class MemberController {
                 .toUri();
         responseHeaders.setLocation(addedMemberURI);
 
-        return new ResponseEntity<>(null,
+        return new ResponseEntity<>(addedMember,
                 responseHeaders,
-                HttpStatus.CREATED);
+                HttpStatus.OK);
     }
 }

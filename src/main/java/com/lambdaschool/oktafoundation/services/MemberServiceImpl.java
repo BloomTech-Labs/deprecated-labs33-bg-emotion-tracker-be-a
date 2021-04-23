@@ -63,6 +63,13 @@ public class MemberServiceImpl implements MemberService
         String member;
         // removes header line from CSV file
         String headerLine = reader.readLine();
+
+        // adds validation check to make sure CSV file contains the memberid header
+        if (! headerLine.equalsIgnoreCase("memberid") )
+        {
+            throw new ResourceNotFoundException("CSV file must contain header memberid");
+        }
+
         while((member = reader.readLine())!= null)
         {
             // removes any quotes if needed from ends of memberid in CSV file
