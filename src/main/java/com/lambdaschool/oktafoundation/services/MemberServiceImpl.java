@@ -58,7 +58,7 @@ public class MemberServiceImpl implements MemberService
     @Override
     public List<Member> saveNewMembers(InputStream stream) throws IOException
     {
-        List<Member> newMembers = new ArrayList<>();
+        List<Member> csvMembers = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String member;
         // removes header line from CSV file
@@ -75,17 +75,23 @@ public class MemberServiceImpl implements MemberService
             // removes any quotes if needed from ends of memberid in CSV file
             member = member.replaceAll("^\"|\"$", "");
 
-            Member isCurrentMember = memberRepository.findMemberByMemberid(member);
-            if ( isCurrentMember == null )
+            Member currentMember = memberRepository.findMemberByMemberid(member);
+            if ( currentMember == null )
             {
                 Member newMember = new Member();
                 newMember.setMemberid(member);
                 Member addedMember = save(newMember);
-                newMembers.add(addedMember);
+                csvMembers.add(addedMember);
+            }
+            else
+            {
+                csvMembers.add(currentMember);
             }
 
         }
-        return newMembers;
+        // all members are returned to allow frontend to use the array list
+        // to generate QR codes
+        return csvMembers;
     }
 
     @Override
