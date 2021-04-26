@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "clubs")
@@ -34,20 +31,15 @@ public class Club extends Auditable
     {
     }
 
-    public Club(@NotNull String clubname, String clubdirector)
+    public Club(@NotNull String clubname)
     {
-        this.clubname = clubname;
-        this.clubdirector = clubdirector;
+        this.clubname = clubname.toLowerCase();
     }
 
-    public Club(
-        @NotNull String clubname,
-        String clubdirector,
-        Set<ClubPrograms> programs)
+    public Club(@NotNull String clubname, String clubdirector)
     {
-        this.clubname = clubname;
-        this.clubdirector = clubdirector;
-        this.programs = programs;
+        this.clubname = clubname.toLowerCase();
+        this.clubdirector = clubdirector.toLowerCase();
     }
 
     public long getClubid() { return clubid; }
