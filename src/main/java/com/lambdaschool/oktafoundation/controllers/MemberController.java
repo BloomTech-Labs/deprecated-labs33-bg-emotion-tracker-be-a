@@ -43,13 +43,10 @@ public class MemberController {
 
     @ApiOperation(value = "adds new members to the database from a CSV file")
     @ApiResponses(value = {
-        @ApiResponse(code = 201,
-            message = "Members Created",
-            response = Member.class,
-            responseContainer = "List"),
         @ApiResponse(code = 200,
             message = "OK",
-            response = String.class),
+            response = Member.class,
+            responseContainer = "list"),
         @ApiResponse(code = 400,
             message = "Bad Request",
             response = ErrorDetail.class)})
@@ -59,12 +56,9 @@ public class MemberController {
         @ApiParam(value = "a CSV file of memberid strings",
             required = true)
             MultipartFile csvfile) throws Exception {
-        List<Member> addedMembers = memberService.saveNewMembers(csvfile.getInputStream());
-        if (addedMembers.size() < 1) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(addedMembers, HttpStatus.CREATED);
-        }
+        List<Member> csvMembers = memberService.saveNewMembers(csvfile.getInputStream());
+        return new ResponseEntity<>(csvMembers, HttpStatus.OK);
+
     }
 
     @ApiOperation(value = "returns a member with the path parameter id",
@@ -175,8 +169,8 @@ public class MemberController {
                 .toUri();
         responseHeaders.setLocation(addedMemberURI);
 
-        return new ResponseEntity<>(null,
+        return new ResponseEntity<>(addedMember,
                 responseHeaders,
-                HttpStatus.CREATED);
+                HttpStatus.OK);
     }
 }
