@@ -120,8 +120,8 @@ public class SeedData
                 r4));
         userService.save(u7);
 
-        Program p1 = new Program("Club Checkin");
-        Program p2 = new Program("Club Checkout");
+        Program p1 = new Program("Volleyball");
+        Program p2 = new Program("Dance");
         Program p3 = new Program("Football");
         Program p4 = new Program("Basketball");
         Program p5 = new Program("Baseball");
